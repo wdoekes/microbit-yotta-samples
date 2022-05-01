@@ -1,0 +1,30 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: fixes these warnings
+ [36/62] Building CXX object ym/microbit-dal/source/CMakeFiles/microbit-dal.dir/drivers/MicroBitRadio.cpp.o
+ In file included from yotta_modules/ble/ble/GattClient.h:22,
+                from yotta_modules/ble/ble/BLE.h:23,
+                from yotta_modules/microbit-dal/inc/bluetooth/MicroBitBLEManager.h:42,
+                from yotta_modules/microbit-dal/source/drivers/MicroBitRadio.cpp:33:
+ yotta_modules/ble/ble/ServiceDiscovery.h: In member function 'virtual ble_error_t ServiceDiscovery::reset()':
+ yotta_modules/ble/ble/ServiceDiscovery.h:148:77:
+   warning: implicitly-declared 'UUID& UUID::operator=(const UUID&)' is deprecated [-Wdeprecated-copy]
+   148 |         matchingServiceUUID        = UUID::ShortUUIDBytes_t(BLE_UUID_UNKNOWN);
+       |                                                                             ^
+
+--- a/yotta_modules/ble/ble/UUID.h    2022-05-01 15:44:52.354070051 +0200
++++ b/yotta_modules/ble/ble/UUID.h    2022-05-01 15:54:13.659558011 +0200
+@@ -218,6 +218,13 @@ public:
+         return !(*this == other);
+     }
+ 
++    UUID &operator= (const UUID &other) {
++	this->type = other.type;
++	this->shortUUID = other.shortUUID;
++        memcpy(this->baseUUID, other.baseUUID, LENGTH_OF_LONG_UUID);
++	return *this;
++    }
++
+ private:
+     UUID_Type_t      type;      // UUID_TYPE_SHORT or UUID_TYPE_LONG
+     LongUUIDBytes_t  baseUUID;  // The long UUID

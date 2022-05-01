@@ -1,0 +1,34 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: fix array-bounds compiler warning
+ [7/20] Building CXX object ym/microbit-dal/source/CMakeFiles/microbit-dal.dir/bluetooth/MicroBitIOPinService.cpp.o
+ yotta_modules/microbit-dal/source/bluetooth/MicroBitIOPinService.cpp:
+  In member function 'void MicroBitIOPinService::onDataWritten(const GattWriteCallbackParams*)':
+ yotta_modules/microbit-dal/source/bluetooth/MicroBitIOPinService.cpp:179:42:
+  warning: array subscript 0 is above array bounds of 'MicroBitPin [0]' [-Warray-bounds]
+   179 |                 io.pin[i].getDigitalValue();
+       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~
+
+--- ./yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h.orig	2022-05-01 16:20:30.620903580 +0200
++++ ./yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h	2022-05-01 16:28:25.211997533 +0200
+@@ -40,8 +40,8 @@ class MicroBitIO
+ {
+     public:
+ 
+-	MicroBitPin			 pin[0];
+-	MicroBitPin          P0;
++    MicroBitPin   *const pin;
++    MicroBitPin          P0;
+     MicroBitPin          P1;
+     MicroBitPin          P2;
+     MicroBitPin          P3;
+--- ./yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp.orig	2022-05-01 16:29:16.055883263 +0200
++++ ./yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp	2022-05-01 16:29:37.435834531 +0200
+@@ -47,6 +47,7 @@ MicroBitIO::MicroBitIO(int ID_P0, int ID
+                        int ID_P12,int ID_P13,int ID_P14,
+                        int ID_P15,int ID_P16,int ID_P19,
+                        int ID_P20) :
++    pin(&this->P0),
+     P0 (ID_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_ALL),             //P0 is the left most pad (ANALOG/DIGITAL/TOUCH)
+     P1 (ID_P1, MICROBIT_PIN_P1, PIN_CAPABILITY_ALL),             //P1 is the middle pad (ANALOG/DIGITAL/TOUCH)
+     P2 (ID_P2, MICROBIT_PIN_P2, PIN_CAPABILITY_ALL),             //P2 is the right most pad (ANALOG/DIGITAL/TOUCH)

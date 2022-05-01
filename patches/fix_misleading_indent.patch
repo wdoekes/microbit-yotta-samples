@@ -1,0 +1,67 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: fix apparent indentation errors
+ Removes these kinds of errors:
+ warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+
+--- a/yotta_modules/microbit-dal/source/core/MicroBitHeapAllocator.cpp	2022-05-01 15:58:14.158619664 +0200
++++ b/yotta_modules/microbit-dal/source/core/MicroBitHeapAllocator.cpp	2022-05-01 15:58:39.826522248 +0200
+@@ -342,7 +342,7 @@ void free(void *mem)
+             if (*cb == 0 || *cb & MICROBIT_HEAP_BLOCK_FREE)
+                 microbit_panic(MICROBIT_HEAP_ERROR);
+ 
+-	        *cb |= MICROBIT_HEAP_BLOCK_FREE;
++            *cb |= MICROBIT_HEAP_BLOCK_FREE;
+             return;
+         }
+     }
+--- a/yotta_modules/microbit-dal/source/core/MicroBitFiber.cpp	2022-05-01 15:57:15.406844421 +0200
++++ b/yotta_modules/microbit-dal/source/core/MicroBitFiber.cpp	2022-05-01 15:57:55.514690712 +0200
+@@ -189,9 +189,9 @@ void scheduler_init(EventModel &_message
+     if (fiber_scheduler_running())
+         return;
+ 
+-	// Store a reference to the messageBus provided.
+-	// This parameter will be NULL if we're being run without a message bus.
+-	messageBus = &_messageBus;
++    // Store a reference to the messageBus provided.
++    // This parameter will be NULL if we're being run without a message bus.
++    messageBus = &_messageBus;
+ 
+     // Create a new fiber context
+     currentFiber = getFiberContext();
+@@ -205,17 +205,17 @@ void scheduler_init(EventModel &_message
+     idleFiber->tcb.SP = CORTEX_M0_STACK_BASE - 0x04;
+     idleFiber->tcb.LR = (uint32_t) &idle_task;
+ 
+-	if (messageBus)
+-	{
+-		// Register to receive events in the NOTIFY channel - this is used to implement wait-notify semantics
+-		messageBus->listen(MICROBIT_ID_NOTIFY, MICROBIT_EVT_ANY, scheduler_event, MESSAGE_BUS_LISTENER_IMMEDIATE);
+-		messageBus->listen(MICROBIT_ID_NOTIFY_ONE, MICROBIT_EVT_ANY, scheduler_event, MESSAGE_BUS_LISTENER_IMMEDIATE);
+-	}
++    if (messageBus)
++    {
++        // Register to receive events in the NOTIFY channel - this is used to implement wait-notify semantics
++        messageBus->listen(MICROBIT_ID_NOTIFY, MICROBIT_EVT_ANY, scheduler_event, MESSAGE_BUS_LISTENER_IMMEDIATE);
++        messageBus->listen(MICROBIT_ID_NOTIFY_ONE, MICROBIT_EVT_ANY, scheduler_event, MESSAGE_BUS_LISTENER_IMMEDIATE);
++    }
+ 
+-	// register a period callback to drive the scheduler and any other registered components.
++    // register a period callback to drive the scheduler and any other registered components.
+     new MicroBitSystemTimerCallback(scheduler_tick);
+ 
+-	fiber_flags |= MICROBIT_SCHEDULER_RUNNING;
++    fiber_flags |= MICROBIT_SCHEDULER_RUNNING;
+ }
+ 
+ /**
+@@ -388,7 +388,7 @@ int fiber_wait_for_event(uint16_t id, ui
+     if(ret == MICROBIT_OK)
+         schedule();
+ 
+-	return ret;
++    return ret;
+ }
+ 
+ /**

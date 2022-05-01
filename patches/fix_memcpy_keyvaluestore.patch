@@ -1,0 +1,38 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: fix class-memaccess warning
+ yotta_modules/microbit-dal/source/drivers/MicroBitStorage.cpp:419:60:
+ warning: 'void* memcpy(void*, const void*, size_t)' copying an object
+ of non-trivial type 'struct KeyValueStore' from an array of 'uint32_t'
+ {aka 'long unsigned int'} [-Wclass-memaccess]
+ 419 |     memcpy(&store, flashBlockPointer, sizeof(KeyValueStore));
+     |                                                            ^
+
+--- a/yotta_modules/microbit-dal/inc/drivers/MicroBitStorage.h	2022-05-01 16:02:39.585630339 +0200
++++ b/yotta_modules/microbit-dal/inc/drivers/MicroBitStorage.h	2022-05-01 16:05:03.613106703 +0200
+@@ -46,11 +46,13 @@ struct KeyValuePair
+     uint8_t value[MICROBIT_STORAGE_VALUE_SIZE];
+ };
+ 
+-struct KeyValueStore
++struct KeyValueStoreData
+ {
+     uint32_t magic;
+     uint32_t size;
++};
+ 
++struct KeyValueStore : KeyValueStoreData {
+     KeyValueStore(uint32_t magic, uint32_t size)
+     {
+         this->magic = magic;
+--- a/yotta_modules/microbit-dal/source/drivers/MicroBitStorage.cpp	2022-05-01 15:58:54.010468608 +0200
++++ b/yotta_modules/microbit-dal/source/drivers/MicroBitStorage.cpp	2022-05-01 16:11:11.689171619 +0200
+@@ -416,7 +416,7 @@ int MicroBitStorage::size()
+     KeyValueStore store = KeyValueStore();
+ 
+     //read our data!
+-    memcpy(&store, flashBlockPointer, sizeof(KeyValueStore));
++    memcpy((KeyValueStoreData*)&store, flashBlockPointer, sizeof(KeyValueStoreData));
+ 
+     //if we haven't used flash before, we need to configure it
+     if(store.magic != MICROBIT_STORAGE_MAGIC)

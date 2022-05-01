@@ -1,12 +1,13 @@
 NAME=microbit-yotta-samples
 COMBINED_HEX=microbit-yotta-samples-combined.hex
 PLATFORM=bbc-microbit-classic-gcc
-SOURCES=main.cpp
-TARGET=build/$(PLATFORM)/$(NAME)/$(NAME)-combined.hex
+SOURCES=main/main.cpp
+TARGET=build/$(PLATFORM)/main/$(NAME)-combined.hex
 
 .PHONY: all
 all: select-target build
 	@echo "Now do 'make upload' to upload the binary"
+	@echo "Switch example by replacing the symlink in main/ and rebuild"
 
 .PHONY: select-target
 select-target: .yotta.json

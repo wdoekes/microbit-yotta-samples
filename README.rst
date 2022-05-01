@@ -7,7 +7,7 @@ micro:bit and yotta samples
 
 Prerequisites (works on *Ubuntu/Focal*)::
 
-    apt-get install yotta
+    sudo apt-get install yotta
 
 Setting up build env and building::
 

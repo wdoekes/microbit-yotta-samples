@@ -1,4 +1,7 @@
 #include "MicroBit.h"
+#if CONFIG_ENABLED(MICROBIT_DBG)
+//# error '''{"microbit-dal": {"debug": 1}}''' from config.json works
+#endif
 
 MicroBit uBit;
 

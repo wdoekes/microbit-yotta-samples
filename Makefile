@@ -1,6 +1,7 @@
 NAME=microbit-yotta-samples
 COMBINED_HEX=microbit-yotta-samples-combined.hex
 PLATFORM=bbc-microbit-classic-gcc
+SOURCES=main.cpp
 TARGET=build/$(PLATFORM)/$(NAME)/$(NAME)-combined.hex
 
 .PHONY: all
@@ -19,7 +20,7 @@ select-target: .yotta.json
 build: $(TARGET)
 	@echo "$(TARGET) is built"
 
-$(TARGET):
+$(TARGET): $(SOURCES)
 	yotta build
 
 .PHONY: clean

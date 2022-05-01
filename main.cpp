@@ -2,6 +2,11 @@
 
 MicroBit uBit;
 
+// The MicroBitSerial serial must(!) be created as global or async
+// fibers will fail.
+MicroBitSerial serial(USBTX, USBRX);
+// READ: stty -F /dev/ttyACM0 115200 raw -clocal -echo && cat /dev/ttyACM0
+
 int main()
 {
     // The scheduler, memory allocator and Bluetooth stack are
@@ -9,6 +14,7 @@ int main()
     uBit.init();
 
     do {
+	serial.send("Hello serial!\n");
 	uBit.display.scroll("Hello world! ");
     } while (0);
 

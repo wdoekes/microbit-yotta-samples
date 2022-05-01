@@ -34,4 +34,5 @@ fullclean:
 .PHONY: upload
 upload:
 	DEST=$$(sed -ne 's/^[^ ]* \(.*MICROBIT\) vfat .*/\1/p' < /proc/mounts) && \
-	cp -v "$(TARGET)" "$$DEST/"
+	test -n "$$DEST" && cp -v "$(TARGET)" "$$DEST/" || \
+	{ echo "upload failed; missing media ($$DEST)?"; false; }

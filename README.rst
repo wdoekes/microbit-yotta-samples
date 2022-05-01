@@ -26,33 +26,39 @@ Uploading to the *micro:bit*::
 Reading from the Serial port
 ----------------------------
 
-Create a tiny shell script::
+Create a tiny shell script as ``/usr/local/bin/serial-monitor``:
 
-    sudo tee /usr/local/bin/serial-monitor <<EOF
+.. code-block:: sh
+
     #!/bin/sh
     set -eu
-    test "\${1:-}" = '-t' && { with_ts=true; shift; } || with_ts=false
-    dev=\${1:-/dev/ttyACM0}
-    baud=\${2:-115200}
-    stty -F "\$dev" "\$baud" raw -clocal -echo
-    echo "Listening on \$dev with \$baud baud" >&2
-    if \$with_ts; then
-        perl -e 'use Time::HiRes qw(gettimeofday);use POSIX qw(strftime);
-          my \$nl=1;while(sysread STDIN,\$b,1){
-          if(\$nl){(\$t,\$ut)=gettimeofday;syswrite STDOUT,
-          (strftime "%H:%M:%S",localtime \$t).(sprintf ".%06d: ",\$ut);\$nl=0}
-          \$nl=1 if \$b eq "\\n";syswrite STDOUT,\$b}' <"\$dev"
+    test "${1:-}" = '-t' && { with_ts=true; shift; } || with_ts=false
+    dev=${1:-/dev/ttyACM0}
+    baud=${2:-115200}
+    stty -F "$dev" "$baud" raw -clocal -echo || {
+        echo "Usage: ${0##*/} [-t] DEV BAUD" >&2; exit 1; }
+    echo "${0##*/} [-t] DEV BAUD; now listening on $dev with $baud baud" >&2
+    if $with_ts; then
+        perl -e 'use strict;use warnings;
+          use Time::HiRes qw(gettimeofday);use POSIX qw(strftime);
+          my ($nl,$t,$ut)=1;while(sysread STDIN,$b,1){
+          if($nl){($t,$ut)=gettimeofday;syswrite STDOUT,
+          (strftime "%H:%M:%S",localtime $t).(sprintf ".%06d: ",$ut);$nl=0}
+          $nl=1 if $b eq "\n";syswrite STDOUT,$b}' <"$dev"
     else
-        cat "\$dev"
+        cat "$dev"
     fi
-    EOF
+
+.. code-block:: console
 
     sudo chmod 755 /usr/local/bin/serial-monitor
 
 Now you can read serial communications from the connected *micro:bit*
 using ``serial-monitor`` or ``serial-monitor -t``.
 
-The *micro:bit* side might look like::
+The *micro:bit* side might look like:
+
+.. code-block:: c++
 
     #include "MicroBit.h"
     MicroBitSerial serial(USBTX, USBRX); // must be a global

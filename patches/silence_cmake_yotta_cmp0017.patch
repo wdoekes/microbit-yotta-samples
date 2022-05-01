@@ -1,0 +1,20 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: silence CMake complaining about CMP0017 being removed
+ I'm not sure if we need that CMP0017 ordering. Without it, the build
+ still works, so removing might be fine. Before, we had these warnings:
+ CMake Deprecation Warning at CMakeLists.txt:16 (cmake_policy):
+  The OLD behavior for policy CMP0017 will be removed from a future version
+  of CMake.
+
+--- /usr/share/yotta/yotta/lib/templates/base_CMakeLists.txt	2022-05-01 18:44:50.864336461 +0200
++++ /usr/share/yotta/yotta/lib/templates/base_CMakeLists.txt	2022-05-01 18:44:54.640326530 +0200
+@@ -14,7 +14,7 @@ add_custom_target(all_tests)
+ 
+ # always use the CMAKE_MODULE_PATH-provided .cmake files, even when including
+ # from system directories:
+-cmake_policy(SET CMP0017 OLD)
++#cmake_policy(SET CMP0017 OLD)
+ 
+ # toolchain file for {{ target_name }}
+ set(CMAKE_TOOLCHAIN_FILE "{{ toolchain_file | replaceBackslashes }}")

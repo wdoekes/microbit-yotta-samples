@@ -1,0 +1,25 @@
+Author: wdoekes
+Date: 2022-05-01
+Description: silence CMake complaining about CMAKE_FORCE_CXX_COMPILER
+ It sure looks like more cmake code could be removed, but replacing this
+ silences these warnings:
+ CMake Deprecation Warning at CMakeForceCompiler.cmake:75 (message):
+  The CMAKE_FORCE_C_COMPILER macro is deprecated.  Instead just set
+  CMAKE_C_COMPILER and allow CMake to identify the compiler.
+
+--- a/yotta_targets/mbed-gcc/CMake/toolchain.cmake	2022-05-01 18:41:02.312968861 +0200
++++ b/yotta_targets/mbed-gcc/CMake/toolchain.cmake	2022-05-01 18:46:50.216029108 +0200
+@@ -72,11 +72,8 @@ set(CMAKE_MODULE_LINKER_FLAGS_INIT
+ )
+ set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_MODULE_LINKER_FLAGS_INIT} -Wl,-wrap,main") 
+ 
+-# Set the compiler to ARM-GCC
+-include(CMakeForceCompiler)
+-
+-cmake_force_c_compiler("${ARM_NONE_EABI_GCC}" GNU)
+-cmake_force_cxx_compiler("${ARM_NONE_EABI_GPP}" GNU)
++set(CMAKE_C_COMPILER arm-none-eabi-gcc)
++set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+ 
+ # post-process elf files into .bin files:
+ function(yotta_apply_target_rules target_type target_name)

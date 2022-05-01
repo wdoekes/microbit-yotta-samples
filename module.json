@@ -1,0 +1,11 @@
+{
+  "name": "microbit-yotta-samples",
+  "version": "0.0.1",
+  "description": "Sample code while developing/exploring the micro:bit (yotta)",
+  "license": "undecided",
+  "dependencies": {
+    "microbit": "lancaster-university/microbit#v2.1.1"
+  },
+  "targetDependencies": {},
+  "bin": "."
+}

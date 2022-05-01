@@ -31,12 +31,12 @@ Create a tiny shell script::
     sudo tee /usr/local/bin/serial-monitor <<EOF
     #!/bin/sh
     set -eu
-    test "\${1:-}" = '-t' && { ts=true; shift; } || ts=false
+    test "\${1:-}" = '-t' && { with_ts=true; shift; } || with_ts=false
     dev=\${1:-/dev/ttyACM0}
     baud=\${2:-115200}
     stty -F "\$dev" "\$baud" raw -clocal -echo
     echo "Listening on \$dev with \$baud baud" >&2
-    if \$ts; then
+    if \$with_ts; then
         perl -e 'use Time::HiRes qw(gettimeofday);use POSIX qw(strftime);
           my \$nl=1;while(sysread STDIN,\$b,1){
           if(\$nl){(\$t,\$ut)=gettimeofday;syswrite STDOUT,

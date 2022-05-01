@@ -9,8 +9,8 @@ Description: fix array-bounds compiler warning
    179 |                 io.pin[i].getDigitalValue();
        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~
 
---- ./yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h.orig	2022-05-01 16:20:30.620903580 +0200
-+++ ./yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h	2022-05-01 16:28:25.211997533 +0200
+--- a/yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h	2022-05-01 16:20:30.620903580 +0200
++++ b/yotta_modules/microbit-dal/inc/drivers/MicroBitIO.h	2022-05-01 16:28:25.211997533 +0200
 @@ -40,8 +40,8 @@ class MicroBitIO
  {
      public:
@@ -22,8 +22,8 @@ Description: fix array-bounds compiler warning
      MicroBitPin          P1;
      MicroBitPin          P2;
      MicroBitPin          P3;
---- ./yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp.orig	2022-05-01 16:29:16.055883263 +0200
-+++ ./yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp	2022-05-01 16:29:37.435834531 +0200
+--- a/yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp	2022-05-01 16:29:16.055883263 +0200
++++ b/yotta_modules/microbit-dal/source/drivers/MicroBitIO.cpp	2022-05-01 16:29:37.435834531 +0200
 @@ -47,6 +47,7 @@ MicroBitIO::MicroBitIO(int ID_P0, int ID
                         int ID_P12,int ID_P13,int ID_P14,
                         int ID_P15,int ID_P16,int ID_P19,

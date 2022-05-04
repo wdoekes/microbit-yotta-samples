@@ -199,7 +199,7 @@ int main()
     uBit.messageBus.listen(MICROBIT_ID_RADIO_DATA_READY,
 	MICROBIT_EVT_ANY, on_radio, MESSAGE_BUS_LISTENER_IMMEDIATE);
 
-    serial.printf("Starting as %s [id 0x%06lX]\n",
+    serial.printf("Starting as %s [id 0x%08lX]\n",
 	(this_device ? this_device->name.toCharArray() : "(null)"),
 	this_serial);
 
